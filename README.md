@@ -1,35 +1,44 @@
-# orderin
-Orderin App (Point Of Sale)
+# Orderin App (Point Of Sale)
 
--- Installing App --
+## Installing App
 clone the repository
 open your terminal, type
+```
 cd orderin
 npm install
 run with
 adonis serve --dev
+```
 
--- Database Configuration --
+## Database Configuration
 open your .env file and setting like this
+```
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_USER=root
 DB_PASSWORD=root
 DB_DATABASE=orderin
+```
 
--- Migration your database --
+## Migration your database
+```
 adonis migration:run
+```
 
--- Running in your browser --
+## Running in your browser
+```
 127.0.0.1:3333
+```
 
--- Please register your account --
+## Please register your account
+```
 127.0.0.1:3333/register
+```
 then login with your email and password
 
--- Insert your product --
+## Insert your product
 then you can order it
 
-Thanks, i hope you enjoy my app
-Note: my app just for 1 user order
+#### Thanks, i hope you enjoy my app
+__Note__: my app just for 1 user order
