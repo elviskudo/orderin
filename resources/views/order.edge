@@ -1,0 +1,114 @@
+@layout('layouts.master')
+
+@section('content')
+  <div class="container">
+    <h1 class="mb-4 mt-4 text-center">Orderin</h1>
+    <div class="row">
+      <div class="col-sm-6 offset-sm-3">
+
+        @if(flashMessage('successMessage'))
+          <div class="alert alert-success mb-4">{{ flashMessage('successMessage') }}</div>
+        @endif
+
+        @if(hasErrorFor('addOrder'))
+          <div class="alert alert-danger mb-4">{{ getErrorFor('addOrder') }}</div>
+        @endif
+
+      <div class="mb-2">Welcome, {{ name }}</div>
+
+        <form action="{{ route('orders.store') }}" method="POST" class="mb-5">
+          {{ csrfField() }}
+          <div class="d-flex">
+            <select name="product_id" class="form-control form-control-lg" id="product_id" placeholder="What do you order?" value="{{ old('product_id') }}">
+							@each(product in products)
+								<option value="{{ product.id }}">{{ product.name }}</option>
+							@endeach
+            </select>
+            <button class="btn btn-primary" type="submit">Add Order</button>
+          </div>
+        </form>
+
+				@if(waitingOrders)
+					<h4>Waiting Orders</h4>
+					<ul class="list-group mb-5">
+						@each(wait in waitingOrders)
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								<div>
+									<a href="{{ route('orders.edit', { id: wait.id }) }}" class="{{ wait.completed ? 'completed' : '' }}">{{ wait.name }}</a> | {{ wait.qty }}
+								</div>
+								<div>
+									<form action="{{ route('orders.approve', { id: wait.id }) }}" method="POST">
+										{{ csrfField() }}
+										<button class="btn btn-sm btn-success">Approve</button>
+									</form>
+								</div>
+								<div>
+									<form action="{{ route('orders.reject', { id: wait.id }) }}" method="POST">
+										{{ csrfField() }}
+										<button class="btn btn-sm btn-warning">Reject</button>
+									</form>
+								</div>
+								<div>
+									<form action="{{ route('orders.delete', { id: wait.id }) + '?_method=DELETE' }}" method="POST">
+										{{ csrfField() }}
+										<button class="btn btn-sm btn-danger">&times;</button>
+									</form>
+								</div>
+							</li>
+						@endeach
+					</ul>
+				@endif
+
+				@if(acceptedOrders)
+					<h4>Accepted Orders</h4>
+					<ul class="list-group mb-5">
+						@each(accept in acceptedOrders)
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								<div>
+									<a href="{{ route('orders.edit', { id: accept.id }) }}" class="{{ accept.completed ? 'completed' : '' }}">{{ accept.name }}</a> | {{ accept.qty }}
+								</div>
+								<div>
+									<form action="{{ route('orders.delete', { id: accept.id }) + '?_method=DELETE' }}" method="POST">
+										{{ csrfField() }}
+										<button class="btn btn-sm btn-danger">&times;</button>
+									</form>
+								</div>
+							</li>
+						@endeach
+					</ul>
+				@endif
+
+				@if(rejectedOrders)
+					<h4>Rejected Orders</h4>
+					<ul class="list-group mb-5">
+						@each(reject in rejectedOrders)
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								<div>
+									<a href="{{ route('orders.edit', { id: reject.id }) }}" class="{{ reject.completed ? 'completed' : '' }}">{{ reject.name }}</a> | {{ reject.qty }}
+								</div>
+								<div>
+									<form action="{{ route('orders.delete', { id: reject.id }) + '?_method=DELETE' }}" method="POST">
+										{{ csrfField() }}
+										<button class="btn btn-sm btn-danger">&times;</button>
+									</form>
+								</div>
+							</li>
+						@endeach
+					</ul>
+				@endif
+
+				<div class="row">
+					<div class="pull-left" style="float: left">
+						<form action="{{ route('logout') }}" method="POST">
+							{{ csrfField() }}
+							<button class="btn btn-primary">Logout</button>
+						</form>
+					</div>
+					<div class="pull-right" style="float: right">
+						<a href="{{ route('products.index') }}" class="btn btn-primary">Product List</a>
+					</div>
+				</div>
+			</div>
+    </div>
+  </div>
+@endsection

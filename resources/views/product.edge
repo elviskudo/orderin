@@ -1,0 +1,55 @@
+@layout('layouts.master')
+
+@section('content')
+  <div class="container">
+    <h1 class="mb-4 mt-4 text-center">Product</h1>
+    <div class="row">
+      <div class="col-sm-6 offset-sm-3">
+
+        @if(flashMessage('successMessage'))
+          <div class="alert alert-success mb-4">{{ flashMessage('successMessage') }}</div>
+        @endif
+
+        @if(hasErrorFor('addOrder'))
+          <div class="alert alert-danger mb-4">{{ getErrorFor('addOrder') }}</div>
+        @endif
+
+				<div class="mb-2">Welcome, {{ name }}</div>
+
+        <form action="{{ route('products.store') }}" method="POST" class="mb-5">
+					{{ csrfField() }}
+					<div class="form-group">
+						<input type="text" name="name" class="form-control form-control-lg" id="name" placeholder="Please insert product" value="{{ old('name') }}">
+					</div>
+					<div class="form-group">
+						<input type="number" name="price" class="form-control form-control-lg" id="price" placeholder="Please insert price" value="{{ old('price') }}">
+					</div>
+					<div class="form-group">
+						<button class="btn btn-primary" type="submit">Add Product</button>
+					</div>
+				</form>
+
+				<ul class="list-group mb-5">
+          @each(product in products)
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <a href="{{ route('products.edit', { id: product.id }) }}" class="{{ product.status ? 'completed' : '' }}">{{ product.name }}</a>
+              </div>
+              <div>
+                <form action="{{ route('products.delete', { id: product.id }) + '?_method=DELETE' }}" method="POST">
+                  {{ csrfField() }}
+                  <button class="btn btn-sm btn-danger">&times;</button>
+                </form>
+              </div>
+            </li>
+          @endeach
+        </ul>
+
+				<form action="#" method="POST">
+					{{ csrfField() }}
+					<a class="btn btn-primary" href="{{ route('orders.index') }}">Order</a>
+				</form>
+			</div>
+    </div>
+  </div>
+@endsection
